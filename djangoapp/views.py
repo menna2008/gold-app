@@ -12,7 +12,7 @@ def login_user(request):
     data = json.loads(request.body)
     username = data['username']
     password = data['password']
-    user = authenticate(uername=username, password=password)
+    user = authenticate(username=username, password=password)
     if user is not None:
         return JsonResponse({'status' : 'authenticated'})
     return JsonResponse({'staus' : 'Could not authenticate'})
