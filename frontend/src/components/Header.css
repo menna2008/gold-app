@@ -1,0 +1,58 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: lightslategray;
+  padding: 10px 20px;
+  font-family: "Comic Sans MS", sans-serif;
+}
+
+/* This class consists of the gold image and the name of the website */
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.left img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.left h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: whitesmoke;
+}
+
+/* The navigation links on the right side of the header */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+/* Each link's style */
+.nav_link {
+  text-decoration: none;
+  padding: 5px;
+  font-weight: bold;
+  position: relative;
+  transition: color 0.3s ease;
+  color: whitesmoke;
+}
+
+.nav_link::after {
+  content: "";
+  display: block;
+  width: 0%;
+  height: 2px;
+  background: lightsteelblue;
+  transition: width 0.3s;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+}
+
+/* When no longer hovered over, the nav-link returns to normal*/
+.nav_link:hover::after {
+  width: 100%;
+}

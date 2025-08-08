@@ -1,0 +1,63 @@
+.body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.landing_page {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-image: url("../assets/background.jpg");
+}
+
+.landing_page h1 {
+  color: whitesmoke;
+  font-size: 28px;
+  padding: 10px;
+}
+
+.landing_page p {
+  color: whitesmoke;
+  padding: 10px;
+}
+
+.nav_link_box {
+  color: lightsteelblue;
+  padding: 10px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav_link {
+  text-decoration: none;
+  font-weight: bold;
+  position: relative;
+  padding: 5px;
+  transition: color 0.3s ease;
+  color: whitesmoke;
+}
+
+.nav_link::after {
+  content: "";
+  display: block;
+  width: 0%;
+  height: 2px;
+  background: lightsteelblue;
+  transition: width 0.3s;
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+}
+
+/* When no longer hovered over, the nav-link returns to normal*/
+.nav_link:hover::after {
+  width: 100%;
+}
