@@ -1,0 +1,7 @@
+requests
+pandas
+django
+django-cors-headers
+yfinance
+scikit-learn
+xgboost

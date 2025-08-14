@@ -1,5 +1,5 @@
 """
-URL configuration for djangoproj project.
+URL configuration for backend project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.2/topics/http/urls/
@@ -16,18 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic import TemplateView
-from django.conf import settings
-from django.conf.urls.static import static
 import os
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('djangoapp/', include('djangoapp.urls')),
-    path('', TemplateView.as_view(template_name='index.html')),
-    path('login/', TemplateView.as_view(template_name='index.html')),
-    path('register/', TemplateView.as_view(template_name="index.html")),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=os.path.join(settings.BASE_DIR, 'frontend/dist/assets'))

@@ -1,23 +1,25 @@
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import metals_icon from "../assets/metals.png";
 import './Header.css';
 
 const Header = () => {
 
+    const navigate = useNavigate()
+
     const logout = async (e) => {
-        const logout_url = window.location.origin+"/djangoapp/logout";
+        const logout_url = 'http://127.0.0.1:8000/djangoapp/logout';
         const res = await fetch(logout_url, {
             method: "GET",
         })
 
         const json = await res.json();
+        console.log(json)
         if (json) {
             let username = sessionStorage.getItem('username');
             sessionStorage.removeItem('username');
-            window.location.href = window.location.origin;
-            window.location.reload();
             alert("Logging out "+username+"...");
-            }
+            navigate('/')
+        }
         else {
             alert("The user could not be logged out.");
         }

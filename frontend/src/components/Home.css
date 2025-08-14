@@ -3,6 +3,8 @@
   width: 100%;
   margin: 0;
   font-family: 'Comic Sans MS', cursive, sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
 .landing_page {
@@ -13,7 +15,7 @@
   justify-content: center;
   align-items: center;
   background-size: cover;
-  background-image: url("../assets/background.jpg");
+  background-image: url("../assets/background.png");
 }
 
 .landing_page h1 {
@@ -22,42 +24,50 @@
   padding: 10px;
 }
 
-.landing_page p {
+.info {
   color: whitesmoke;
   padding: 10px;
 }
 
-.nav_link_box {
-  color: lightsteelblue;
+.warning {
+  color: rgb(184,0,0);
+  font-weight: bold;
   padding: 10px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.nav_link {
-  text-decoration: none;
+.prediction_link_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  background-color: lightslategray;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.prediction_link {
+  padding: 3px;
+  color: whitesmoke;
   font-weight: bold;
   position: relative;
-  padding: 5px;
-  transition: color 0.3s ease;
-  color: whitesmoke;
 }
 
-.nav_link::after {
+.prediction_link::after {
   content: "";
   display: block;
   width: 0%;
   height: 2px;
-  background: lightsteelblue;
+  background: whitesmoke;
   transition: width 0.3s;
   position: absolute;
-  bottom: -3px;
+  bottom: -1px;
   left: 0;
 }
 
-/* When no longer hovered over, the nav-link returns to normal*/
-.nav_link:hover::after {
+.prediction_link:hover::after {
   width: 100%;
+}
+
+.prediction_link:hover {
+  color: whitesmoke;
 }

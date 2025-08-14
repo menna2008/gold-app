@@ -8,4 +8,6 @@ urlpatterns = [
     path(route='login', view=views.login_user, name='login'),
     path(route='logout', view=views.logout_user, name='logout'),
     path(route='register', view=views.register, name='register'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path(route='prediction', view=views.prediction, name='prediction'),
+    path(route='save_prediction', view=views.save_prediction, name='save_prediction'),
+]

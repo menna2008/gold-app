@@ -1,19 +1,20 @@
 import { useState } from "react";
-import Header from "./header";
-import person from "../assets/person.png";
+import Header from "./Header";
 import './UserManagement.css';
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+
+    const navigate = useNavigate()
 
     {/* Handles loging in user */}
     const login = async (e) => {
         e.preventDefault();
 
         {/* sends a request to the login view in djangoapp */}
-        let url = window.location.origin + '/djangoapp/login';
+        let url = 'http://127.0.0.1:8000/djangoapp/login';
         let res = await fetch(url, {
             method: 'POST',
             headers: {
@@ -30,7 +31,7 @@ const Login = () => {
         if (res.status === 'authenticated') {
             {/* User is authenticated and returns to the home page */}
             sessionStorage.setItem('username', username);
-            window.location.href = window.location.origin;
+            navigate('/');
         } else {
             {/* User is not logged in, they stay on the login page */}
             alert(res.status);
@@ -38,21 +39,17 @@ const Login = () => {
     }
 
     return (
-        <div>
+        <div className="body">
             <Header />
             <div className='container'>
                 <form className='form' onSubmit={login}>
-                    <h3>Login</h3>
-                    <div className='input-group'>
-                        <img src={person} alt=""></img>
+                    <h1>Login</h1>
+                    <div className="input-group">
                         <input type="text" name="username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                    </div>
-                    <div className='input-group'>
-                        <img src={person} alt=""></img>
                         <input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <input className="submit-button" type="submit" value="Login" />
-                    <NavLink to='/register' className='nav_link'>Register</NavLink>
+                    <p>Don't have an account? <NavLink to='/register' className="link">Register</NavLink></p>
                 </form>
             </div>
         </div>

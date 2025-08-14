@@ -32,27 +32,32 @@
 
 /* Each link's style */
 .nav_link {
-  text-decoration: none;
   padding: 5px;
   font-weight: bold;
   position: relative;
-  transition: color 0.3s ease;
   color: whitesmoke;
 }
 
+/* Pseudo underline element that is initially invisible*/
 .nav_link::after {
   content: "";
   display: block;
+  color: whitesmoke;
   width: 0%;
   height: 2px;
-  background: lightsteelblue;
+  background: whitesmoke;
   transition: width 0.3s;
   position: absolute;
   bottom: -3px;
   left: 0;
 }
 
-/* When no longer hovered over, the nav-link returns to normal*/
+/* When hovered over, the nav_link underline appears */
 .nav_link:hover::after {
   width: 100%;
+}
+
+/* When hovered over, the nav_link color stays the same */
+.nav_link:hover {
+  color: whitesmoke;
 }

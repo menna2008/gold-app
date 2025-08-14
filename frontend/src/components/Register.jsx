@@ -1,8 +1,7 @@
 import { useState } from "react";
-import Header from "./header";
-import person from "../assets/person.png";
+import Header from "./Header";
 import './UserManagement.css'
-import { NavLink } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
     const [firstName, setFirstName] = useState('')
@@ -11,9 +10,11 @@ const Register = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
+    const navigate = useNavigate()
+
     const register = async (e) => {
         e.preventDefault();
-        const url = window.location.origin + '/djangoapp/register'
+        const url = 'http://127.0.0.1:8000/djangoapp/register';
         let res = await fetch(url, {
             method : 'POST',
             headers: {
@@ -31,40 +32,27 @@ const Register = () => {
         res = await res.json();
         if (res.status === 'registered') {
             sessionStorage.setItem('username', username);
-            window.location.href = window.location.origin;
+            navigate('/');
         } else {
             alert(res.status);
         }
     }
 
     return (
-        <div>
+        <div className="body">
             <Header />
             <div className='container'>
                 <form className='form' onSubmit={register}>
-                    <h3>Register</h3>
-                    <div className='input-group'>
-                        <img src={person} alt=""></img>
+                    <h1>Register</h1>
+                    <div className="input-group">
                         <input type="text" name="first_name" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                    </div>
-                    <div className='input-group'>
-                        <img src={person} alt=""></img>
                         <input type="text" name="last_name" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                    </div>
-                    <div className='input-group'>
-                        <img src={person} alt=""></img>
                         <input type="text" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    </div>
-                    <div className='input-group'>
-                        <img src={person} alt=""></img>
                         <input type="text" name="username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                    </div>
-                    <div className='input-group'>
-                        <img src={person} alt=""></img>
                         <input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
                     <input className="submit-button" type="submit" value="Register" />
-                    <NavLink to='/login' className='nav_link'>Login</NavLink>
+                    <p>Already have an account? <Link to='/login' className="link">Login</Link></p>
                 </form>
             </div>
         </div>
