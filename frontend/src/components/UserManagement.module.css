@@ -33,14 +33,14 @@
   font-weight: bold;
 }
 
-.input-group {
+.input_group {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 15px;
 }
 
-.input-group input {
+.input_group input {
   background-color: transparent;
   border: none;
   border-bottom: 2px solid black;
@@ -55,7 +55,7 @@ input::placeholder {
   color: whitesmoke;
 }
 
-.submit-button {
+.submit_button {
   padding: 10px;
   font-weight: bold;
   background-color: lightslategray;

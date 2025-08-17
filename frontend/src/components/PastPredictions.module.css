@@ -1,0 +1,123 @@
+.body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+}
+
+.past_predictions {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  background-image: url("../assets/background.png");
+  background-size: contain;
+  background-position: center;
+  padding: 20px;
+  align-items: center;
+}
+
+h1 {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.prediction_list {
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
+  color: lightslategray;
+  padding: 30px;
+  width: 90%;
+  border-radius: 20px;
+  margin: 0 auto;
+}
+
+.prediction {
+  cursor: pointer;
+  padding: 10px;
+  margin: 10px 0;
+  border-bottom: 1px solid black;
+}
+
+.details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+  padding: 0 10px;
+}
+
+.details.expanded {
+  max-height: 650px;
+  padding: 10px;
+}
+
+.chart_container {
+  height: 600px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary div {
+  display: flex;
+  align-items: center;
+}
+
+.summary div img {
+  width: 15px;
+  height: 15px;
+  padding-left: 5px;
+}
+
+.prediction_link_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  background-color: lightslategray;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.prediction_link {
+  padding: 3px;
+  color: whitesmoke;
+  font-weight: bold;
+  position: relative;
+}
+
+.prediction_link::after {
+  content: "";
+  display: block;
+  width: 0%;
+  height: 2px;
+  background: whitesmoke;
+  transition: width 0.3s;
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+}
+
+.prediction_link:hover::after {
+  width: 100%;
+}
+
+.prediction_link:hover {
+  color: whitesmoke;
+}
+
+.warning {
+  color: #a80000;
+  font-weight: bold;
+  padding: 10px;
+}

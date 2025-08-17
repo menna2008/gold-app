@@ -1,5 +1,5 @@
 import Header from "./Header.jsx";
-import "./Prediction.css"
+import styles from "./Prediction.module.css"
 import { useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
@@ -10,8 +10,6 @@ import {
     LineElement,
     Title,
     Tooltip,
-    plugins,
-    scales,
 } from "chart.js";
 
 ChartJS.register(
@@ -23,59 +21,128 @@ ChartJS.register(
     Tooltip,
 )
 
+const options = {
+    plugins: {
+        legend: {
+            display: false,
+        },
+        title: {
+            display: true,
+            text: 'Price Predictions over the next 30 days',
+            color: 'black',
+            font: {
+                family: "'Comic Sans MS', cursive, sans-serif",
+                size: 16,
+                weight: 'bold',
+            }
+        }
+    },
+    scales: {
+        x: {
+            title: {
+                display: true,
+                text: 'Date',
+                color: 'black',
+                font: {
+                    family: "'Comic Sans MS', cursive, sans-serif",
+                    size: 14,
+                    weight: 'bold',
+                }
+            },
+            ticks: {
+                color: 'black',
+                font: {
+                    family: "'Comic Sans MS', cursive, sans-serif",
+                    size: 12,
+                }
+            },
+            grid: {
+                color: 'rgb(0, 0, 0, 0.2)',
+            }
+        },
+        y: {
+            title: {
+                display: true,
+                text: 'Price ($)',
+                color: 'black',
+                font: {
+                    family: "'Comic Sans MS', cursive, sans-serif",
+                    size: 14,
+                    weight: 'bold',
+                }
+            },
+            ticks: {
+                color: 'black',
+                font: {
+                    family: "'Comic Sans MS', cursive, sans-serif",
+                    size: 12,
+                }
+            },
+            grid: {
+                color: 'rgb(0, 0, 0, 0.2)',
+            }
+        }
+    }
+}
+
+const LineData = (predictions) => {
+    let dates = []
+    let prices = []
+
+    predictions.forEach((element) => {
+        dates.push(element['date'])
+        prices.push(element['price'])
+    })
+
+    return {
+        labels: dates,
+        datasets: [{
+            data: prices,
+            borderColor: "rgb(75, 192, 192)",
+            backgroundColor: "rgb(176, 196, 222)"
+        }]
+    }
+}
+
 const Prediction = () => {
 
     const [metal, setMetal] = useState('');
     const [purity, setPurity] = useState('');
     const [currency, setCurrency] = useState('USD');
     const [predictions, setPredictions] = useState([]);
-    const [lineChartData, setLineChartData] = useState(null)
 
     const submit = async () => {
         if (metal === '') {
             alert('Please enter a metal');
-        } else {
-            try {
-                const url = `http://127.0.0.1:8000/djangoapp/prediction?metal=${metal}&purity=${purity}&currency=${currency}`;
-                let res = await fetch(url, {
-                    method : 'GET',
-                });
-                const status = res.status
-                res = await res.json();
-                setPredictions(res['predictions']);
-
-                if (status === 200) {
-                    let dates = []
-                    let prices = []
-
-                    res['predictions'].forEach((element) => {
-                        dates.push(element['date'])
-                        prices.push(element['price'])
-                    })
-
-                    setLineChartData({
-                        labels: dates,
-                        datasets: [{
-                            data: prices,
-                            borderColor: "rgb(75, 192, 192)",
-                            backgroundColor: "rgb(176, 196, 222)"
-                        }]
-                    })
-                } else {
-                    alert('Error fetching predictions')
-                }
-            } catch (error) {
-                alert('Network error')
-            }
+            return;
         }
-    };
+        if (purity === '') {
+            alert('Please enter a purity');
+            return;
+        }
+        try {
+            const url = `http://127.0.0.1:8000/djangoapp/prediction?metal=${metal}&purity=${purity}&currency=${currency}`;
+            let res = await fetch(url, {
+                method : 'GET',
+            });
+            const status = res.status
+            res = await res.json();
+
+            if (status === 200) {
+                setPredictions(res['predictions']);
+            } else {
+                alert('Error fetching predictions')
+            }
+        } catch (error) {
+            alert('Network error')
+        }
+    }
 
     const reset = () => {
         setMetal('');
         setPurity('');
         setCurrency('USD');
         setPredictions([]);
-        setLineChartData(null);
     }
 
     const savePrediction = async () => {
@@ -85,10 +152,10 @@ const Prediction = () => {
             let res = await fetch('http://127.0.0.1:8000/djangoapp/save_prediction', {
                 method: 'POST',
                 headers: {
+                    'Authorization': 'Token ' + sessionStorage.getItem('token'),
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    'username': sessionStorage.getItem('username'),
                     'metal': metal,
                     'purity': purity,
                     'currency': currency,
@@ -100,74 +167,8 @@ const Prediction = () => {
 
             if (res.status === 'success') {
                 alert('Prediction saved successfully');
-            } else if (res.status === 'error') {
-                alert(res.message);
             } else {
-                alert(res.status);
-            }
-        }
-    }
-
-    let options = {
-        plugins: {
-            legend: {
-                display: false,
-            },
-            title: {
-                display: true,
-                text: 'Price Predictions over the next 30 days',
-                color: 'white',
-                font: {
-                    family: "'Comic Sans MS', cursive, sans-serif",
-                    size: 16,
-                    weight: 'bold',
-                }
-            }
-        },
-        scales: {
-            x: {
-                title: {
-                    display: true,
-                    text: 'Date',
-                    color: 'white',
-                    font: {
-                        family: "'Comic Sans MS', cursive, sans-serif",
-                        size: 14,
-                        weight: 'bold',
-                    }
-                },
-                ticks: {
-                    color: 'white',
-                    font: {
-                        family: "'Comic Sans MS', cursive, sans-serif",
-                        size: 12,
-                    }
-                },
-                grid: {
-                    color: 'rgb(255, 255, 255, 0.4)',
-                }
-            },
-            y: {
-                title: {
-                    display: true,
-                    text: 'Price ($)',
-                    color: 'white',
-                    font: {
-                        family: "'Comic Sans MS', cursive, sans-serif",
-                        size: 14,
-                        weight: 'bold',
-                    }
-                },
-                ticks: {
-                    color: 'white',
-                    font: {
-                        family: "'Comic Sans MS', cursive, sans-serif",
-                        size: 12,
-                    }
-                },
-                grid: {
-                    color: 'rgb(255, 255, 255, 0.4)',
-                }
+                alert(res.message);
             }
         }
     }
@@ -175,7 +176,7 @@ const Prediction = () => {
     let purity_options
 
     if (metal === '') {
-        purity_options = <select name="purity" id="purity" value="">
+        purity_options = <select name="purity" id="purity" defaultValue="">
             <option disabled value="">Select a metal first</option>
         </select>
     } else if (metal === 'gold') {
@@ -212,11 +213,11 @@ const Prediction = () => {
     }
 
     return (
-        <div className="body">
+        <div className={styles.body}>
             <Header />
-            <div className="prediction">
-                <div className="options">
-                    <div className="option">
+            <div className={styles.prediction}>
+                <div className={styles.options}>
+                    <div className={styles.option}>
                         <span>Metal</span>
                         <select name="metal" id="metal" value={metal} onChange={(e) => {
                             setMetal(e.target.value);
@@ -229,11 +230,11 @@ const Prediction = () => {
                             <option value="palladium">Palladium</option>
                         </select>
                     </div>
-                    <div className="option">
+                    <div className={styles.option}>
                         <span>Purity</span>
                         {purity_options}
                     </div>
-                    <div className="option">
+                    <div className={styles.option}>
                         <span>Currency</span>
                         <select name="currency" id="currency" value={currency} onChange={(e) => setCurrency(e.target.value)}>
                             <option disabled value="">Select Currency</option>
@@ -255,14 +256,15 @@ const Prediction = () => {
                     <button onClick={reset}>Reset</button>
                     {sessionStorage.getItem('username') ? <button onClick={savePrediction}>Save Prediction</button> : <></>}
                 </div>
-                {lineChartData ? (
-                    <div className="results">
-                        <Line options={options} data={lineChartData}/>
-                    </div>
+                <div className={styles.results}>
+                {predictions.length > 0 ? (
+                        <Line options={{ ...options, maintainAspectRatio: false }} data={LineData(predictions)} />
                 ) : <></>}
+                </div>
             </div>
         </div>
     );
 };
 
 export default Prediction;
+export { options, LineData };

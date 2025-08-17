@@ -57,5 +57,8 @@ button:hover, button:focus {
 .results {
     display: flex;
     flex: 1;
-    width: 100%;
+    width: 95%;
+    background-color: whitesmoke;
+    border-radius: 30px;
+    padding: 20px;
 }

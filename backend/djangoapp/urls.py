@@ -10,4 +10,5 @@ urlpatterns = [
     path(route='register', view=views.register, name='register'),
     path(route='prediction', view=views.prediction, name='prediction'),
     path(route='save_prediction', view=views.save_prediction, name='save_prediction'),
+    path(route='past_predictions', view=views.past_predictions, name='past_predictions'),
 ]

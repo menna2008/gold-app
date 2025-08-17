@@ -3,6 +3,7 @@ from sklearn.model_selection import TimeSeriesSplit
 import pandas as pd
 from datetime import date, timedelta
 import requests
+import os
 
 def create_lag_features(df, lags=[1, 2, 3, 5, 7, 14, 30]):
     for lag in lags:
@@ -59,9 +60,10 @@ def predict_future(model, df, metal, purity, currency):
         last_30_days.loc[len(last_30_days)] = price
         last_30_days = last_30_days.iloc[1 : ].reset_index(drop=True)
 
+    API_KEY = os.getenv('EXCHANGE_RATE_API_KEY')
     rate = 1
     if currency != 'USD':
-        url = f'https://v6.exchangerate-api.com/v6/ba7c4703c99bfdf76ee3fb0f/pair/USD/{currency}'
+        url = f'https://v6.exchangerate-api.com/v6/${API_KEY}/pair/USD/{currency}'
         res = requests.get(url)
         data = res.json()
         rate = data['conversion_rate']

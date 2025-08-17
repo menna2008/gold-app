@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./Header";
-import './UserManagement.css';
+import styles from './UserManagement.module.css';
 import { NavLink, useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -8,6 +8,14 @@ const Login = () => {
     const [password, setPassword] = useState('')
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const username = sessionStorage.getItem('username')
+        if (username) {
+            alert ('You are already logged in')
+            navigate('/')
+        }
+    }, [])
 
     {/* Handles loging in user */}
     const login = async (e) => {
@@ -31,25 +39,26 @@ const Login = () => {
         if (res.status === 'authenticated') {
             {/* User is authenticated and returns to the home page */}
             sessionStorage.setItem('username', username);
+            sessionStorage.setItem('token', res.token);
             navigate('/');
         } else {
             {/* User is not logged in, they stay on the login page */}
-            alert(res.status);
+            alert(res.message);
         }
     }
 
     return (
-        <div className="body">
+        <div className={styles.body}>
             <Header />
-            <div className='container'>
-                <form className='form' onSubmit={login}>
+            <div className={styles.container}>
+                <form className={styles.form} onSubmit={login}>
                     <h1>Login</h1>
-                    <div className="input-group">
+                    <div className={styles.input_group}>
                         <input type="text" name="username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
                         <input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                    <input className="submit-button" type="submit" value="Login" />
-                    <p>Don't have an account? <NavLink to='/register' className="link">Register</NavLink></p>
+                    <input className={styles.submit_button} type="submit" value="Login" />
+                    <p>Don't have an account? <NavLink to='/register' className={styles.link}>Register</NavLink></p>
                 </form>
             </div>
         </div>

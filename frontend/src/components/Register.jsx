@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Header from "./Header";
-import './UserManagement.css'
+import styles from './UserManagement.module.css'
 import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -32,27 +32,28 @@ const Register = () => {
         res = await res.json();
         if (res.status === 'registered') {
             sessionStorage.setItem('username', username);
+            sessionStorage.setItem('token', res.token);
             navigate('/');
         } else {
-            alert(res.status);
+            alert(res.message);
         }
     }
 
     return (
-        <div className="body">
+        <div className={styles.body}>
             <Header />
-            <div className='container'>
-                <form className='form' onSubmit={register}>
+            <div className={styles.container}>
+                <form className={styles.form} onSubmit={register}>
                     <h1>Register</h1>
-                    <div className="input-group">
+                    <div className={styles.input_group}>
                         <input type="text" name="first_name" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                         <input type="text" name="last_name" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                         <input type="text" name="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         <input type="text" name="username" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
                         <input type="password" name="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                    <input className="submit-button" type="submit" value="Register" />
-                    <p>Already have an account? <Link to='/login' className="link">Login</Link></p>
+                    <input className={styles.submit_button} type="submit" value="Register" />
+                    <p>Already have an account? <Link to='/login' className={styles.link}>Login</Link></p>
                 </form>
             </div>
         </div>
