@@ -9,6 +9,7 @@
 
 /* This class consists of the gold image and the name of the website */
 .left {
+  cursor: pointer;
   display: flex;
   align-items: center;
 }

@@ -1,6 +1,6 @@
 import Header from "./Header.jsx";
 import styles from "./Prediction.module.css"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -104,11 +104,28 @@ const LineData = (predictions) => {
     }
 }
 
+const Loading = () => {
+    const [dots, setDots] = useState('');
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setDots((prev) => (prev.length < 3 ? prev + '.' : '.'));
+        }, 750);
+        return () => clearInterval(interval);
+    }, []);
+    return (
+        <div className={styles.loading}>
+            Loading{dots}
+        </div>
+    )
+}
+
 const Prediction = () => {
 
     const [metal, setMetal] = useState('');
     const [purity, setPurity] = useState('');
     const [currency, setCurrency] = useState('USD');
+    const [loading, setLoading] = useState(false);
+    const [dots, setDots] = useState('');
     const [predictions, setPredictions] = useState([]);
 
     const submit = async () => {
@@ -121,6 +138,9 @@ const Prediction = () => {
             return;
         }
         try {
+            setPredictions([]);
+            setLoading(true);
+
             const url = `http://127.0.0.1:8000/djangoapp/prediction?metal=${metal}&purity=${purity}&currency=${currency}`;
             let res = await fetch(url, {
                 method : 'GET',
@@ -135,6 +155,8 @@ const Prediction = () => {
             }
         } catch (error) {
             alert('Network error')
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -257,9 +279,10 @@ const Prediction = () => {
                     {sessionStorage.getItem('username') ? <button onClick={savePrediction}>Save Prediction</button> : <></>}
                 </div>
                 <div className={styles.results}>
-                {predictions.length > 0 ? (
+                    {loading && <Loading />}
+                    {predictions.length > 0 &&  
                         <Line options={{ ...options, maintainAspectRatio: false }} data={LineData(predictions)} />
-                ) : <></>}
+                    }
                 </div>
             </div>
         </div>

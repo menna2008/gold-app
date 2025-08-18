@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 from .models import Prediction
 import json
 import yfinance as yf
-from .XGBoost import create_lag_features, xgboost_model, predict_future
+from .XGBoost import create_features, xgboost_model, predict_future
 from datetime import date
 from .serializers import PredictionSerializer
 
@@ -97,7 +97,7 @@ def prediction(request):
     data = data['Close']
     data = data.reset_index(drop=False)
     data.columns = ['date', 'price']
-    data = create_lag_features(data)
+    data = create_features(data)
     data = data.reset_index(drop=True)
     
     model = xgboost_model(data, metal)
@@ -144,7 +144,6 @@ def past_predictions(request):
         try:
             predictions = Prediction.objects.filter(user=request.user)
             serializer = PredictionSerializer(predictions, many=True)
-            print(serializer.data)
             return Response({'status' : 'success', 'predictions' : serializer.data})
         except Exception as e:
             return Response({'status' : 'error', 'message' : str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -152,11 +151,8 @@ def past_predictions(request):
         try:
             prediction = Prediction.objects.get(id=request.data.get('id'), user=request.user)
             prediction.delete()
-            print('success')
             return Response({'status' : 'success'}, status=status.HTTP_204_NO_CONTENT)
         except Prediction.DoesNotExist:
-            print('Prediction not found')
             return Response({'status' : 'error', 'message' : 'Prediction not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            print('Error deleting prediction:', str(e))
             return Response({'status' : 'error', 'message' : str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

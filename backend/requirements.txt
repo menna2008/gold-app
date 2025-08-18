@@ -3,6 +3,7 @@ pandas
 django
 djangorestframework
 django-cors-headers
+django-environ
 yfinance
 scikit-learn
 xgboost

@@ -48,7 +48,7 @@ const Header = () => {
 
     return (
         <div className={styles.navbar}>
-            <div className={styles.left}>
+            <div className={styles.left} onClick={() => navigate('/')}>
                 <img src={metals_icon} alt="" />
                 <h3>Precious Metals Price Predictions</h3>
             </div>

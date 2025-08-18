@@ -3,13 +3,21 @@ from sklearn.model_selection import TimeSeriesSplit
 import pandas as pd
 from datetime import date, timedelta
 import requests
-import os
+import os, environ
 
-def create_lag_features(df, lags=[1, 2, 3, 5, 7, 14, 30]):
+def create_features(df, lags=[1, 2, 3, 5, 7, 14, 30]):
     for lag in lags:
         df[f'lag_{lag}'] = df['price'].shift(lag)
     df['rolling_7_mean'] = df['price'].rolling(window=7).mean()
     df['rolling_30_mean'] = df['price'].rolling(window=30).mean()
+    df['rolling_7_std'] = df['price'].rolling(window=7).std()
+    df['rolling_30_std'] = df['price'].rolling(window=30).std()
+    df['return_1d'] = df['price'].pct_change(1)
+    df['return_7d'] = df['price'].pct_change(7)
+    df['price_minus_ma7'] = df['price'] - df['rolling_7_mean']
+    df['price_minus_ma30'] = df['price'] - df['rolling_30_mean']
+    df['price_div_ma7'] = df['price'] / df['rolling_7_mean']
+    df['price_div_ma30'] = df['price'] / df['rolling_30_mean']
     return df.dropna()
 
 def xgboost_model(df, metal_name='gold', random_state=42):
@@ -53,6 +61,14 @@ def predict_future(model, df, metal, purity, currency):
             features[f'lag_{lag}'] = last_30_days['price'].iloc[-lag]
         features['rolling_7_mean'] = last_30_days['price'].tail(7).mean()
         features['rolling_30_mean'] = last_30_days['price'].mean()
+        features['rolling_7_std'] = last_30_days['price'].tail(7).std()
+        features['rolling_30_std'] = last_30_days['price'].std()
+        features['return_1d'] = last_30_days['price'].pct_change(1).iloc[-1]
+        features['return_7d'] = last_30_days['price'].pct_change(7).iloc[-1]
+        features['price_minus_ma7'] = last_30_days['price'].iloc[-1] - features['rolling_7_mean']
+        features['price_minus_ma30'] = last_30_days['price'].iloc[-1] - features['rolling_30_mean']
+        features['price_div_ma7'] = last_30_days['price'].iloc[-1] / features['rolling_7_mean']
+        features['price_div_ma30'] = last_30_days['price'].iloc[-1] / features['rolling_30_mean']
 
         price = float(model.predict(pd.DataFrame([features]))[0])
 
@@ -60,10 +76,12 @@ def predict_future(model, df, metal, purity, currency):
         last_30_days.loc[len(last_30_days)] = price
         last_30_days = last_30_days.iloc[1 : ].reset_index(drop=True)
 
-    API_KEY = os.getenv('EXCHANGE_RATE_API_KEY')
+    env = environ.Env()
+    environ.Env.read_env()
+    API_KEY = env('EXCHANGE_RATE_API_KEY')
     rate = 1
     if currency != 'USD':
-        url = f'https://v6.exchangerate-api.com/v6/${API_KEY}/pair/USD/{currency}'
+        url = f'https://v6.exchangerate-api.com/v6/{API_KEY}/pair/USD/{currency}'
         res = requests.get(url)
         data = res.json()
         rate = data['conversion_rate']
@@ -80,6 +98,6 @@ def predict_future(model, df, metal, purity, currency):
         purity_ratio = purity/999
 
     for i in range(len(predictions)):
-        predictions[i]['price'] = round(predictions[i]['price'] * purity_ratio * rate, 2)
+        predictions[i]['price'] = round(predictions[i]['price'] * purity_ratio * float(rate), 2)
     
     return predictions

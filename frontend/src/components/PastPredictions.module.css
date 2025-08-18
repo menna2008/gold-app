@@ -12,7 +12,6 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  overflow-y: auto;
   background-image: url("../assets/background.png");
   background-size: contain;
   background-position: center;
@@ -25,15 +24,27 @@ h1 {
   margin: 20px 0;
 }
 
-.prediction_list {
+.prediction_box {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  width: 95%;
+  height: 80vh;
   background-color: whitesmoke;
-  color: lightslategray;
-  padding: 30px;
-  width: 90%;
-  border-radius: 20px;
-  margin: 0 auto;
+  border-radius: 30px;
+  padding: 20px;
+}
+
+.prediction_list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  height: 90%;
+  overflow-y: auto;
 }
 
 .prediction {
@@ -41,6 +52,7 @@ h1 {
   padding: 10px;
   margin: 10px 0;
   border-bottom: 1px solid black;
+  width: 95%;
 }
 
 .details {
@@ -66,6 +78,7 @@ h1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: lightslategray;
 }
 
 .summary div {
@@ -83,7 +96,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin: 10px;
   background-color: lightslategray;
   border-radius: 10px;
   padding: 10px;

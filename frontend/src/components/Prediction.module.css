@@ -56,9 +56,18 @@ button:hover, button:focus {
 
 .results {
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex: 1;
     width: 95%;
     background-color: whitesmoke;
     border-radius: 30px;
     padding: 20px;
+}
+
+.loading {
+    display: flex;
+    font-size: 24px;
+    font-weight: bold;
+    color: lightslategray;
 }

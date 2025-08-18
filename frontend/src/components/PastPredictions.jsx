@@ -86,6 +86,7 @@ const PastPredictions = () => {
             <Header />
             <div className={styles.past_predictions}>
                 <h1>Past Predictions</h1>
+                <div className={styles.prediction_box}>
                 {pastPredictions.length > 0 ? 
                     <div className={styles.prediction_list}>
                     {pastPredictions.map((prediction) => {
@@ -116,11 +117,11 @@ const PastPredictions = () => {
                         }
 
                         return (
-                            <div key={prediction.id} className={styles.prediction}>
+                            <div key={prediction.id} className={styles.prediction} onClick={() => toggleIndex(prediction.id)}>
                                 <div className={styles.summary}>
                                     <p>Price of <strong>{purityDisplay} {prediction.metal}</strong> in {prediction.currency} starting from {prediction.start_date} for 30 days</p>
                                     <div>
-                                        <p onClick={() => toggleIndex(prediction.id, prediction)}>{expandedIndex === prediction.id ? '▲' : '▼'}</p>
+                                        <p>{expandedIndex === prediction.id ? '▲' : '▼'}</p>
                                         <img src={delete_icon} alt='delete' onClick={() => handleDelete(prediction.id)} />
                                     </div>
                                 </div>
@@ -132,10 +133,11 @@ const PastPredictions = () => {
                             </div>
                     )})}
                     </div>
-                    : <div className={styles.warning}>No past predictions found.</div>
+                    : <p style={{ color: 'darkred' }}>No past predictions found.</p>
                 }
                 <div className={styles.prediction_link_container}>
                     <NavLink to='/prediction' className={styles.prediction_link}>Make Prediction</NavLink>
+                </div>
                 </div>
             </div>
         </div>
