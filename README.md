@@ -1,5 +1,5 @@
 # Precious Metals Price Prediction App
-This application is designed to predict the price of gold, silver, platinum, and palladium over a 30 day periiod.
+This application is designed to predict the price of gold, silver, platinum, and palladium over a 30 day period.
 
 ## How to install and run on your local computer
 First run this command:
